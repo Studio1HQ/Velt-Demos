@@ -18,8 +18,8 @@ A PDF Editor-inspired document collaboration app built with Next.js, React-PDF, 
 
 | Category             | Technology               |
 | -------------------- | ------------------------ |
-| **Framework**        | Next.js 13+ (App Router) |
-| **UI Library**       | React 18                 |
+| **Framework**        | Next.js 16+ (App Router) |
+| **UI Library**       | React 19                 |
 | **PDF Engine**       | react-pdf                |
 | **Collaboration**    | Velt SDK                 |
 | **Styling**          | Tailwind CSS             |
