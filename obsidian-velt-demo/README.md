@@ -16,8 +16,6 @@ This project was developed using cutting-edge AI-assisted tools:
 - **IDE**: Antigravity
 - **Capabilities**: The AI handled scaffolding, component architecture, Velt SDK integration, and iterative UI refinements, while human oversight drove design direction and quality control.
 
-## Features
-
 ### Real-time Collaboration
 
 - **CRDT Sync** — Simultaneous editing with automatic conflict resolution via Velt's TipTap CRDT extension (Yjs-based)
@@ -109,6 +107,21 @@ obsidian-velt-demo/
 ```bash
 cd obsidian-velt-demo
 npm install
+```
+
+### Environment Variables
+
+Copy the `.env.example` file to create your local environment file:
+
+```bash
+cp .env.example .env.local
+```
+
+Open `.env.local` and add your Velt API key and Auth token (you can get these from the [Velt Console](https://console.velt.dev/)):
+
+```env
+VITE_VELT_API_KEY=your_api_key_here
+VITE_VELT_AUTH_TOKEN=your_auth_token_here
 ```
 
 ### Run Development Server
