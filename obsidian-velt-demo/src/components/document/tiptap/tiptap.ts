@@ -58,10 +58,18 @@ export async function createTipTapEditor(
     bubbleMenuElement.className = "bubble-menu-container";
     document.body.appendChild(bubbleMenuElement);
 
+    // Debug: Check CRDT store state
+    const yXml = store.getYXml();
+    const yDoc = store.getYDoc();
+    console.log("[TipTap] YXml content:", yXml?.toString());
+    console.log("[TipTap] YDoc:", yDoc);
+    console.log("[TipTap] Store connected:", store.isConnected());
+
     const extensions = [
       StarterKit.configure({
-        heading: false,
-        dropcursor: false,
+        undoRedo: false, // Disable undo/redo — CRDT handles it
+        heading: false, // Using custom inline headings
+        dropcursor: false, // Disable to avoid conflicts
       }),
       TextAlign.configure({ types: ["paragraph"] }),
       Underline,
@@ -158,13 +166,6 @@ export async function createTipTapEditor(
       commentElement.onCommentAdd()?.subscribe((comment: any) => {
         console.log("[TipTap] New comment added:", comment);
       });
-
-      const rerenderInterval = setInterval(() => {
-        if (!editor) {
-          clearInterval(rerenderInterval);
-          return;
-        }
-      }, 5000);
     }
   } catch (error: any) {
     console.error("[TipTap] Failed to initialize:", error);

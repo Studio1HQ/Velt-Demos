@@ -4,8 +4,8 @@ import "./components/velt/ui-customization/styles.css";
 
 import { initializeUser } from "./lib/user";
 import { initializeDocument } from "./lib/document";
-import { initializeVelt, authenticateUser, setVeltDocument } from "./lib/velt";
-import { initializeTheme } from "./lib/theme";
+import { initializeVelt, authenticateUser, setVeltDocument, setVeltDarkMode } from "./lib/velt";
+import { initializeTheme, getTheme } from "./lib/theme";
 import { configureNotificationsTool } from "./components/velt/velt-tools";
 import { createVeltCollaboration } from "./components/velt/velt-collaboration";
 
@@ -14,7 +14,6 @@ import { createToolbar } from "./components/toolbar/toolbar";
 import { createPropertiesPanel } from "./components/properties/properties-panel";
 import { createTipTapEditor } from "./components/document/tiptap/tiptap";
 import { createGraphView } from "./components/graph/graph-view";
-import { createUserSwitcher } from "./components/user-switcher/user-switcher";
 
 let editorInstance: any = null;
 let graphInstance: any = null;
@@ -178,10 +177,7 @@ async function init() {
     console.log("[App] Editor created successfully");
 
     createVeltCollaboration(app);
-    createUserSwitcher(document.body);
 
-    const { getTheme } = await import("./lib/theme");
-    const { setVeltDarkMode } = await import("./lib/velt");
     setVeltDarkMode(getTheme() === "dark");
     setTimeout(() => setVeltDarkMode(getTheme() === "dark"), 1000);
     setTimeout(() => setVeltDarkMode(getTheme() === "dark"), 3000);

@@ -1,4 +1,5 @@
 import { createVeltTools } from "../velt/velt-tools";
+import { createUserSwitcher } from "../user-switcher/user-switcher";
 import { getTheme, toggleTheme, subscribeToTheme } from "../../lib/theme";
 
 interface ToolbarOptions {
@@ -54,6 +55,10 @@ export function createToolbar(container: HTMLElement, options: ToolbarOptions) {
 
         <div style="width: 1px; height: 20px; background: var(--border-light);"></div>
 
+        <div id="user-presence-slot" style="display: flex; align-items: center;"></div>
+
+        <div style="width: 1px; height: 20px; background: var(--border-light);"></div>
+
         <button id="btn-properties" class="${propertiesOpen ? "active" : ""}" title="Toggle properties">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="14" y="3" width="7" height="18" rx="2"></rect>
@@ -74,6 +79,11 @@ export function createToolbar(container: HTMLElement, options: ToolbarOptions) {
     const veltSlot = toolbar.querySelector("#velt-tools-slot");
     if (veltSlot) {
       createVeltTools(veltSlot as HTMLElement);
+    }
+
+    const presenceSlot = toolbar.querySelector("#user-presence-slot");
+    if (presenceSlot) {
+      createUserSwitcher(presenceSlot as HTMLElement);
     }
 
     toolbar

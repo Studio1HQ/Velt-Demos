@@ -41,7 +41,7 @@ export function getUser(): DemoUser {
 }
 
 export function initializeUser(): DemoUser {
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = sessionStorage.getItem(STORAGE_KEY);
   if (stored !== null) {
     const idx = parseInt(stored, 10);
     if (idx >= 0 && idx < DEMO_USERS.length) {
@@ -51,20 +51,35 @@ export function initializeUser(): DemoUser {
   return DEMO_USERS[currentUserIndex];
 }
 
-export async function switchUser(index: number): Promise<void> {
-  if (index < 0 || index >= DEMO_USERS.length) return;
-  localStorage.setItem(STORAGE_KEY, index.toString());
+/**
+ * Switch user by saving the new index and reloading the page.
+ * A full reload is necessary because the CRDT store, CollaborationCaret,
+ * Velt comment subscriptions, and presence all bind to the authenticated
+ * user at initialization time. Re-identifying alone does not rebind them.
+ */
+export async function switchUser(
+  index: number,
+  _onUpdateUI?: () => void,
+): Promise<void> {
+  if (index < 0 || index >= DEMO_USERS.length || index === currentUserIndex)
+    return;
 
-  try {
-    const { getVeltClient } = await import("./velt");
-    const client = getVeltClient();
-    if (client) {
-      await client.signOutUser();
-      console.log("[User] Signed out from Velt before switching");
-    }
-  } catch (e) {
-    console.warn("[User] Could not sign out:", e);
-  }
+  // Show a loading overlay while the page reloads
+  const overlay = document.createElement("div");
+  overlay.id = "velt-loading-overlay";
+  overlay.style.cssText =
+    "position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(14, 14, 14, 0.85);backdrop-filter:blur(6px);z-index:99999;display:flex;align-items:center;justify-content:center;color:white;font-family:sans-serif;font-size:16px;";
+  overlay.innerHTML =
+    "<div style='display:flex;flex-direction:column;align-items:center;gap:16px;'>" +
+    "<div style='width:32px;height:32px;border:3px solid #333;border-top-color:#7c3aed;border-radius:50%;animation:spin 1s linear infinite;'></div>" +
+    "<p style='color:#ccc'>Switching to " + DEMO_USERS[index].name + "...</p>" +
+    "</div><style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>";
+  document.body.appendChild(overlay);
 
+  // Persist selection and reload — on next load, initializeUser() picks it up
+  sessionStorage.setItem(STORAGE_KEY, index.toString());
+
+  // Small delay so the overlay is visible before the reload
+  await new Promise((r) => setTimeout(r, 150));
   window.location.reload();
 }

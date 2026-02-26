@@ -1,11 +1,12 @@
 import { subscribeToTheme, getTheme } from "../../lib/theme";
 
+/**
+ * Creates Velt tool web components (sidebar button, huddle, notifications).
+ * Note: velt-presence is now rendered inside the user-switcher component.
+ */
 export function createVeltTools(container: HTMLElement) {
   const wrapper = document.createElement("div");
   wrapper.className = "velt-tools-container";
-
-  const presence = document.createElement("velt-presence");
-  wrapper.appendChild(presence);
 
   const sidebarButton = document.createElement("velt-sidebar-button");
   wrapper.appendChild(sidebarButton);
@@ -24,7 +25,7 @@ export function createVeltTools(container: HTMLElement) {
   function applyDarkMode() {
     const isDark = getTheme() === "dark";
     const elements = wrapper.querySelectorAll(
-      "velt-presence, velt-sidebar-button, velt-huddle-tool, velt-notifications-tool",
+      "velt-sidebar-button, velt-huddle-tool, velt-notifications-tool",
     );
     elements.forEach((el) => {
       if (isDark) {
